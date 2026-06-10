@@ -1,0 +1,67 @@
+---
+import { waLink } from '../data/viajes';
+
+const textoWa = encodeURIComponent('Hola! Vi la web de Darius Viajes y quiero info ✈');
+const linkWa = `https://wa.me/5491112345678?text=${textoWa}`;
+---
+
+<nav class="fixed top-0 left-0 right-0 z-100 flex items-center justify-between px-[5vw] h-[68px] bg-white shadow-[0_2px_12px_rgba(11,37,69,.10)]">
+  <a href="#" class="flex items-center gap-2 no-underline text-navy">
+    <div class="w-[38px] h-[38px] bg-navy rounded-lg flex items-center justify-center">
+      <svg viewBox="0 0 24 24" class="w-[22px] h-[22px] fill-white"><path d="M21 3L3 10.5l7.5 3L21 3zm0 0L13.5 21l-3-7.5"/></svg>
+    </div>
+    <div class="flex flex-col leading-tight">
+      <strong class="text-[1.15rem] font-bold tracking-[.04em]">DARIUS</strong>
+      <span class="text-[.65rem] tracking-[.18em] text-teal uppercase">VIAJES</span>
+    </div>
+  </a>
+
+  <ul class="hidden md:flex items-center gap-8 list-none">
+    <li><a href="#" class="nav-link text-sm font-medium no-underline pb-[3px] border-b-2 transition-colors duration-200 active text-teal border-teal">Inicio</a></li>
+    <li><a href="#caribe" class="text-sm font-medium no-underline text-navy pb-[3px] border-b-2 border-transparent hover:text-teal hover:border-teal transition-colors duration-200 nav-link">Caribe</a></li>
+    <li><a href="#brasil" class="text-sm font-medium no-underline text-navy pb-[3px] border-b-2 border-transparent hover:text-teal hover:border-teal transition-colors duration-200 nav-link">Brasil</a></li>
+    <li><a href="#cruceros" class="text-sm font-medium no-underline text-navy pb-[3px] border-b-2 border-transparent hover:text-teal hover:border-teal transition-colors duration-200 nav-link">Cruceros</a></li>
+    <li><a href="#argentina" class="text-sm font-medium no-underline text-navy pb-[3px] border-b-2 border-transparent hover:text-teal hover:border-teal transition-colors duration-200 nav-link">Argentina</a></li>
+    <li><a href="#contacto" class="text-sm font-medium no-underline text-navy pb-[3px] border-b-2 border-transparent hover:text-teal hover:border-teal transition-colors duration-200 nav-link">Contacto</a></li>
+  </ul>
+
+  <a href={linkWa} target="_blank" class="inline-flex items-center gap-2 bg-wa text-white px-5 py-[9px] rounded-full text-[.85rem] font-semibold no-underline transition-transform duration-200 shadow-[0_4px_14px_rgba(37,211,102,.35)] hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(37,211,102,.45)]">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.134.558 4.136 1.535 5.875L0 24l6.312-1.507A11.935 11.935 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.8 9.8 0 01-5.017-1.376l-.36-.213-3.728.89.936-3.617-.234-.373A9.77 9.77 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/></svg>
+    Consultá por WhatsApp
+  </a>
+</nav>
+
+<script>
+  // Nav active state on scroll
+  const navLinks = document.querySelectorAll('.nav-link');
+  const activeLink = document.querySelector('.nav-link.active, nav a[href="#"]');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY + 100;
+    const sections = ['caribe', 'brasil', 'cruceros', 'argentina', 'contacto'];
+    let found = false;
+    sections.reverse().forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.offsetTop <= y && !found) {
+        navLinks.forEach(a => a.classList.remove('active', 'text-teal', 'border-teal'));
+        navLinks.forEach(a => a.classList.add('text-navy', 'border-transparent'));
+        const match = document.querySelector(`.nav-link[href="#${id}"]`);
+        if (match) {
+          match.classList.add('active', 'text-teal', 'border-teal');
+          match.classList.remove('text-navy', 'border-transparent');
+          found = true;
+        }
+      }
+    });
+    if (!found) {
+      navLinks.forEach(a => {
+        a.classList.remove('active', 'text-teal', 'border-teal');
+        a.classList.add('text-navy', 'border-transparent');
+      });
+      const inicio = document.querySelector('.nav-link[href="#"]');
+      if (inicio) {
+        inicio.classList.add('active', 'text-teal', 'border-teal');
+        inicio.classList.remove('text-navy', 'border-transparent');
+      }
+    }
+  });
+</script>

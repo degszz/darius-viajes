@@ -1,0 +1,448 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+  <style>
+    .admin-body {
+      font-family: 'Inter', sans-serif;
+      background: #F5F9FC;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .admin-container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 32px rgba(11,37,69,.12);
+      width: 100%;
+      max-width: 860px;
+      padding: 40px;
+    }
+    .admin-container h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: #0B2545;
+      margin: 0 0 6px;
+    }
+    .admin-container .subtitle {
+      font-size: 0.85rem;
+      color: #6B7280;
+      margin: 0 0 28px;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #0B2545;
+      margin-bottom: 5px;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      color: #0B2545;
+      background: #fff;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      outline: none;
+      border-color: #0EA5A0;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px; border-radius: 50px;
+      font-size: 0.88rem; font-weight: 600; border: none; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      font-family: inherit;
+    }
+    .btn-primary { background: #0EA5A0; color: #fff; }
+    .btn-primary:hover { background: #14C9C3; }
+    .btn-danger { background: #ef4444; color: #fff; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-outline { background: transparent; border: 1.5px solid #0EA5A0; color: #0EA5A0; }
+    .btn-outline:hover { background: #0EA5A0; color: #fff; }
+    .btn-sm { padding: 6px 14px; font-size: 0.75rem; }
+    .trip-list { margin-top: 32px; }
+    .trip-list h3 { font-size: 1rem; color: #0B2545; margin: 0 0 16px; }
+    .trip-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px; border-radius: 10px;
+      border: 1px solid #e2e8f0; margin-bottom: 10px;
+      transition: border-color 0.2s;
+    }
+    .trip-item:hover { border-color: #0EA5A0; }
+    .trip-item img { width: 60px; height: 44px; object-fit: cover; border-radius: 6px; background: #e2e8f0; }
+    .img-upload-area {
+      border: 2px dashed #d1d5db; border-radius: 10px; padding: 20px;
+      text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+      background: #fafafa;
+    }
+    .img-upload-area:hover { border-color: #0EA5A0; background: #f0fdfa; }
+    .img-upload-area.has-image { border-style: solid; border-color: #0EA5A0; background: #f0fdfa; }
+    .img-upload-area input[type=file] { display: none; }
+    .img-upload-area .upload-text { font-size: 0.82rem; color: #6B7280; }
+    .img-upload-area .upload-text strong { color: #0EA5A0; }
+    .img-upload-area img { max-width: 100%; max-height: 160px; border-radius: 8px; margin-top: 10px; }
+    .img-preview-small { margin-top: 6px; font-size: 0.7rem; color: #0EA5A0; }
+    .trip-item .info { flex: 1; }
+    .trip-item .info strong { display: block; font-size: 0.9rem; color: #0B2545; }
+    .trip-item .info span { font-size: 0.75rem; color: #6B7280; }
+    .trip-item .actions { display: flex; gap: 8px; }
+    .message { font-size: 0.8rem; padding: 8px 14px; border-radius: 8px; margin-bottom: 16px; }
+    .message-success { background: #d1fae5; color: #065f46; }
+    .message-error { background: #fee2e2; color: #991b1b; }
+    .hidden { display: none !important; }
+    .section-divider {
+      border: none; border-top: 1px solid #e2e8f0;
+      margin: 28px 0;
+    }
+    .btn-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.82rem; color: #0EA5A0; text-decoration: none;
+      margin-bottom: 20px; font-weight: 500;
+    }
+    .btn-back:hover { color: #14C9C3; }
+    @media (max-width: 600px) {
+      .admin-container { padding: 24px; }
+      .form-row { grid-template-columns: 1fr; }
+      .trip-item { flex-wrap: wrap; }
+    }
+  </style>
+
+  <div class="admin-body">
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" class="admin-container" style="max-width:420px;text-align:center;">
+      <h1 style="margin-bottom:8px;">Darius Admin</h1>
+      <p class="subtitle">Ingresá la contraseña para gestionar viajes</p>
+      <div id="login-error" class="message message-error hidden"></div>
+      <div class="form-group">
+        <input type="password" id="password-input" placeholder="Contraseña" style="text-align:center;font-size:1.1rem;padding:12px;" />
+      </div>
+      <button class="btn btn-primary" id="login-btn" style="width:100%;justify-content:center;">Ingresar</button>
+    </div>
+
+    <!-- ADMIN SCREEN -->
+    <div id="admin-screen" class="admin-container hidden">
+      <a href="/" class="btn-back">&larr; Volver al sitio</a>
+      <h1>Panel de Administración</h1>
+      <p class="subtitle">Gestioná los viajes que aparecen en la landing</p>
+      <div id="admin-message" class="message message-success hidden"></div>
+
+      <form id="trip-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre del viaje</label>
+            <input type="text" id="trip-nombre" placeholder="Ej: Punta Cana" required />
+          </div>
+          <div class="form-group">
+            <label>Categoría</label>
+            <select id="trip-categoria" required>
+              <option value="Caribe">Caribe</option>
+              <option value="Brasil">Brasil</option>
+              <option value="Cruceros">Cruceros</option>
+              <option value="Argentina">Argentina</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Imagen del viaje</label>
+          <div class="img-upload-area" id="img-upload-area" onclick="document.getElementById('trip-imagen-file').click()">
+            <input type="file" id="trip-imagen-file" accept="image/*" />
+            <div id="img-upload-placeholder">
+              <span class="upload-text"><strong>Click para subir imagen</strong><br/>JPG, PNG, AVIF, WebP &rarr; se convierte a WebP</span>
+            </div>
+            <img id="img-upload-preview" style="display:none;" alt="Preview" />
+            <p id="img-upload-info" class="img-preview-small" style="display:none;"></p>
+          </div>
+          <input type="hidden" id="trip-imagen" />
+          <input type="text" id="trip-imagen-url" placeholder="O pegá una URL externa..." style="margin-top:8px;" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Precio desde</label>
+            <input type="text" id="trip-precio" placeholder="Ej: USD 999" required />
+          </div>
+          <div class="form-group">
+            <label>Descripción corta (promo)</label>
+            <input type="text" id="trip-descripcion-corta" placeholder="Ej: 7 noches All Inclusive" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Descripción larga (para el modal)</label>
+          <textarea id="trip-descripcion-larga" rows="3" placeholder="Descripción detallada del viaje..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Texto de WhatsApp</label>
+          <input type="text" id="trip-texto-wa" placeholder="Ej: Hola! Quiero info sobre Punta Cana..." required />
+        </div>
+        <input type="hidden" id="trip-edit-id" />
+        <div style="display:flex;gap:12px;">
+          <button type="submit" class="btn btn-primary" id="trip-submit-btn">Agregar viaje</button>
+          <button type="button" class="btn btn-outline" id="trip-cancel-btn" style="display:none;">Cancelar edición</button>
+        </div>
+      </form>
+
+      <hr class="section-divider" />
+
+      <div class="trip-list">
+        <h3>Viajes cargados (<span id="trip-count">0</span>)</h3>
+        <div id="trip-list-container">
+          <p style="color:#6B7280;font-size:0.85rem;">No hay viajes cargados todavía.</p>
+        </div>
+      </div>
+
+      <hr class="section-divider" />
+
+      <div style="text-align:right;">
+        <button class="btn btn-danger btn-sm" id="clear-all-btn">Eliminar todos los viajes</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var STORAGE_KEY = 'darius_viajes';
+    var PASSWORD_HASH = '6ca13d52ca70c883e0f0bb101e425a89e8624de51db2d2392593af6a84118090'; // sha256("darius2024")
+
+    function el(id) { return document.getElementById(id); }
+
+    async function sha256(msg) {
+      var buf = new TextEncoder().encode(msg);
+      var hash = await crypto.subtle.digest('SHA-256', buf);
+      return Array.from(new Uint8Array(hash)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+    }
+
+    var pendingImageData = null;
+
+    function convertToWebP(file, callback) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var img = new Image();
+        img.onload = function() {
+          var canvas = document.createElement('canvas');
+          var maxW = 800;
+          var scale = Math.min(1, maxW / img.width);
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          var webpData = canvas.toDataURL('image/webp', 0.78);
+          var sizeKB = Math.round(webpData.length * 0.75 / 1024);
+          el('img-upload-preview').src = webpData;
+          el('img-upload-preview').style.display = 'block';
+          el('img-upload-placeholder').style.display = 'none';
+          el('img-upload-info').textContent = 'WebP ~' + sizeKB + ' KB';
+          el('img-upload-info').style.display = 'block';
+          el('img-upload-area').classList.add('has-image');
+          pendingImageData = webpData;
+          if (callback) callback(webpData);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    el('trip-imagen-file').addEventListener('change', function(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) {
+        alert('La imagen no puede superar 5 MB.');
+        return;
+      }
+      convertToWebP(file);
+    });
+
+    function loadTrips() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      } catch(e) {
+        return [];
+      }
+    }
+
+    function saveTrips(trips) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(trips));
+    }
+
+    function showMessage(type, text) {
+      var msg = el('admin-message');
+      msg.className = 'message message-' + type;
+      msg.textContent = text;
+      msg.classList.remove('hidden');
+      setTimeout(function() { msg.classList.add('hidden'); }, 4000);
+    }
+
+    function renderTripList() {
+      var trips = loadTrips();
+      var container = el('trip-list-container');
+      el('trip-count').textContent = trips.length;
+
+      if (trips.length === 0) {
+        container.innerHTML = '<p style="color:#6B7280;font-size:0.85rem;">No hay viajes cargados todavía.</p>';
+        return;
+      }
+
+      container.innerHTML = trips.map(function(t, i) {
+        return '<div class="trip-item">' +
+          '<img src="' + escapeHTML(t.imagen) + '" alt="' + escapeHTML(t.nombre) + '" onerror="this.style.display=\'none\'" />' +
+          '<div class="info">' +
+            '<strong>' + escapeHTML(t.nombre) + '</strong>' +
+            '<span>' + escapeHTML(t.categoria) + ' &middot; ' + escapeHTML(t.precio) + '</span>' +
+            '<span>' + escapeHTML(t.descripcionCorta) + '</span>' +
+          '</div>' +
+          '<div class="actions">' +
+            '<button class="btn btn-outline btn-sm" onclick="editTrip(' + i + ')">Editar</button>' +
+            '<button class="btn btn-danger btn-sm" onclick="deleteTrip(' + i + ')">Eliminar</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function escapeHTML(str) {
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+
+    function resetForm() {
+      el('trip-nombre').value = '';
+      el('trip-categoria').value = 'Caribe';
+      el('trip-imagen').value = '';
+      el('trip-imagen-url').value = '';
+      el('trip-imagen-file').value = '';
+      el('img-upload-preview').style.display = 'none';
+      el('img-upload-placeholder').style.display = '';
+      el('img-upload-info').style.display = 'none';
+      el('img-upload-area').classList.remove('has-image');
+      pendingImageData = null;
+      el('trip-precio').value = '';
+      el('trip-descripcion-corta').value = '';
+      el('trip-descripcion-larga').value = '';
+      el('trip-texto-wa').value = '';
+      el('trip-edit-id').value = '';
+      el('trip-submit-btn').textContent = 'Agregar viaje';
+      el('trip-cancel-btn').style.display = 'none';
+    }
+
+    function editTrip(index) {
+      var trips = loadTrips();
+      var t = trips[index];
+      el('trip-nombre').value = t.nombre;
+      el('trip-categoria').value = t.categoria;
+      el('trip-precio').value = t.precio;
+      el('trip-descripcion-corta').value = t.descripcionCorta;
+      el('trip-descripcion-larga').value = t.descripcionLarga;
+      el('trip-texto-wa').value = t.textoWhatsApp;
+      el('trip-edit-id').value = index;
+      pendingImageData = null;
+      el('trip-imagen-file').value = '';
+      if (t.imagen && t.imagen.startsWith('data:')) {
+        el('img-upload-preview').src = t.imagen;
+        el('img-upload-preview').style.display = 'block';
+        el('img-upload-placeholder').style.display = 'none';
+        el('img-upload-area').classList.add('has-image');
+        pendingImageData = t.imagen;
+        el('trip-imagen-url').value = '';
+      } else {
+        el('img-upload-preview').style.display = 'none';
+        el('img-upload-placeholder').style.display = '';
+        el('img-upload-area').classList.remove('has-image');
+        el('trip-imagen-url').value = t.imagen || '';
+      }
+      el('trip-imagen').value = t.imagen;
+      el('trip-submit-btn').textContent = 'Guardar cambios';
+      el('trip-cancel-btn').style.display = 'inline-flex';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function deleteTrip(index) {
+      if (!confirm('¿Eliminar este viaje?')) return;
+      var trips = loadTrips();
+      trips.splice(index, 1);
+      saveTrips(trips);
+      renderTripList();
+      showMessage('success', 'Viaje eliminado.');
+    }
+
+    el('trip-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var trips = loadTrips();
+      var editId = el('trip-edit-id').value;
+
+      var imagenSrc = pendingImageData || el('trip-imagen-url').value.trim();
+      if (!imagenSrc) {
+        alert('Debés subir una imagen o pegar una URL.');
+        return;
+      }
+
+      var trip = {
+        id: 'dyn-' + Date.now(),
+        nombre: el('trip-nombre').value.trim(),
+        categoria: el('trip-categoria').value,
+        imagen: imagenSrc,
+        precio: el('trip-precio').value.trim(),
+        descripcionCorta: el('trip-descripcion-corta').value.trim(),
+        descripcionLarga: el('trip-descripcion-larga').value.trim(),
+        textoWhatsApp: el('trip-texto-wa').value.trim(),
+      };
+
+      if (editId !== '') {
+        trip.id = trips[parseInt(editId)].id;
+        trips[parseInt(editId)] = trip;
+        showMessage('success', 'Viaje actualizado.');
+      } else {
+        trips.push(trip);
+        showMessage('success', 'Viaje agregado correctamente.');
+      }
+
+      saveTrips(trips);
+      renderTripList();
+      resetForm();
+    });
+
+    el('trip-cancel-btn').addEventListener('click', resetForm);
+
+    el('clear-all-btn').addEventListener('click', function() {
+      if (confirm('¿Eliminar TODOS los viajes cargados? Esta acción no se puede deshacer.')) {
+        saveTrips([]);
+        renderTripList();
+        resetForm();
+        showMessage('success', 'Todos los viajes fueron eliminados.');
+      }
+    });
+
+    // Login
+    el('password-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') attemptLogin();
+    });
+
+    el('login-btn').addEventListener('click', attemptLogin);
+
+    async function attemptLogin() {
+      var input = el('password-input').value;
+      if (!input) return;
+      var hash = await sha256(input);
+      if (hash === PASSWORD_HASH) {
+        el('login-screen').classList.add('hidden');
+        el('admin-screen').classList.remove('hidden');
+        renderTripList();
+        el('password-input').value = '';
+      } else {
+        var err = el('login-error');
+        err.textContent = 'Contraseña incorrecta';
+        err.classList.remove('hidden');
+        el('password-input').value = '';
+      }
+    }
+  </script>
+</Layout>

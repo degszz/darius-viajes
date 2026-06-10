@@ -1,0 +1,38 @@
+---
+import { promos, waLink } from '../data/viajes';
+---
+
+<section class="py-20 px-[5vw] bg-white" id="promos">
+  <div class="text-center mb-11">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold text-navy tracking-[.04em] uppercase">Promociones de la semana</h2>
+    <span class="block w-[52px] h-[3px] rounded-[2px] mx-auto mt-[10px]" style="background: linear-gradient(90deg, #0EA5A0, #F0B429)"></span>
+  </div>
+
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-5">
+    {promos.map(p => (
+      <div class="rounded-xl overflow-hidden shadow-[0_3px_16px_rgba(11,37,69,.10)] transition-all duration-300 bg-white hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(11,37,69,.16)] group cursor-pointer" data-modal-viaje={p.viajeRef}>
+        <div class="relative h-40 overflow-hidden">
+          <img src={p.imagen} alt={p.nombre} loading="lazy" class="w-full h-full object-cover transition-transform duration-400 group-hover:scale-108" />
+        </div>
+        <div class="p-[18px_16px]">
+          <h3 class="text-[.95rem] font-bold text-navy mb-1">{p.nombre}</h3>
+          <p class="text-[.78rem] text-gray-custom mb-3 leading-relaxed">{p.descripcion}</p>
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col">
+              <span class="text-[.68rem] uppercase tracking-[.08em] text-gray-custom">Desde</span>
+              <strong class="text-[1.15rem] font-bold text-teal">{p.precio}</strong>
+            </div>
+            <a
+              href={waLink(p.textoWhatsApp)}
+              target="_blank"
+              class="bg-transparent border-[1.5px] border-teal text-teal py-[7px] px-4 rounded-full text-[.75rem] font-semibold cursor-pointer transition-colors duration-200 no-underline hover:bg-teal hover:text-white"
+              onclick="event.stopPropagation()"
+            >
+              Consultar
+            </a>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

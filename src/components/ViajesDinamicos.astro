@@ -1,0 +1,97 @@
+<script>
+  (function () {
+    var STORAGE_KEY = 'darius_viajes';
+    var WA_NUMERO = '5491112345678';
+
+    function loadTrips() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      } catch(e) {
+        return [];
+      }
+    }
+
+    function waLink(texto) {
+      return 'https://wa.me/' + WA_NUMERO + '?text=' + encodeURIComponent(texto);
+    }
+
+    function escapeHTML(str) {
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+
+    var categoryIcons = {
+      'Caribe':    '<svg viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-teal-light"><path d="M3 17c3-3 9-3 12 0s9 0 9 0"/><path d="M3 7s6-4 12 0 9 0 9 0"/><path d="M3 12c3-2 9-2 12 0s9 0 9 0"/></svg>',
+      'Brasil':    '<svg viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-teal-light"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>',
+      'Cruceros':  '<svg viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-teal-light"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2"/><path d="M5 20V9l7-7 7 7v11"/><path d="M9 20v-5h6v5"/></svg>',
+      'Argentina': '<svg viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-teal-light"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>'
+    };
+
+    function buildDestCard(trip) {
+      var icon = categoryIcons[trip.categoria] || '';
+      return '<div class="rounded-[14px] overflow-hidden relative h-[320px] cursor-pointer shadow-[0_4px_20px_rgba(11,37,69,.12)] transition-all duration-300 hover:-translate-y-[6px] hover:shadow-[0_12px_36px_rgba(11,37,69,.2)] group" data-modal-viaje="' + escapeHTML(trip.id) + '" style="--tw-translate-x:0;--tw-translate-y:0">' +
+        '<img src="' + escapeHTML(trip.imagen) + '" alt="' + escapeHTML(trip.nombre) + '" loading="lazy" class="w-full h-full object-cover block transition-transform duration-400 group-hover:scale-106" onerror="this.src=\'/bariloche.avif\'" />' +
+        '<div class="absolute inset-0 bg-[linear-gradient(0deg,rgba(11,37,69,.82)_38%,transparent_70%)] flex flex-col justify-end p-[22px_20px]">' +
+          '<div class="w-[38px] h-[38px] rounded-full bg-teal/25 backdrop-blur-sm border-[1.5px] border-teal/60 flex items-center justify-center mb-3">' + icon + '</div>' +
+          '<h3 class="text-[1.3rem] font-bold text-white mb-1">' + escapeHTML(trip.nombre) + '</h3>' +
+          '<p class="text-[.8rem] text-white/75 mb-[14px] leading-relaxed">' + escapeHTML(trip.descripcionCorta) + '</p>' +
+          '<button type="button" data-modal-viaje="' + escapeHTML(trip.id) + '" class="inline-block bg-teal text-white py-[7px] px-[18px] rounded-full text-[.75rem] font-bold no-underline self-start transition-colors duration-200 hover:bg-teal-light cursor-pointer border-none">Más información</button>' +
+        '</div>' +
+      '</div>';
+    }
+
+    function buildPromoCard(trip) {
+      return '<div class="rounded-xl overflow-hidden shadow-[0_3px_16px_rgba(11,37,69,.10)] transition-all duration-300 bg-white hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(11,37,69,.16)] group cursor-pointer" data-modal-viaje="' + escapeHTML(trip.id) + '">' +
+        '<div class="relative h-40 overflow-hidden">' +
+          '<img src="' + escapeHTML(trip.imagen) + '" alt="' + escapeHTML(trip.nombre) + '" loading="lazy" class="w-full h-full object-cover transition-transform duration-400 group-hover:scale-108" onerror="this.src=\'/bariloche.avif\'" />' +
+        '</div>' +
+        '<div class="p-[18px_16px]">' +
+          '<h3 class="text-[.95rem] font-bold text-navy mb-1">' + escapeHTML(trip.nombre) + '</h3>' +
+          '<p class="text-[.78rem] text-gray-custom mb-3 leading-relaxed">' + escapeHTML(trip.descripcionCorta) + '</p>' +
+          '<div class="flex items-center justify-between">' +
+            '<div class="flex flex-col"><span class="text-[.68rem] uppercase tracking-[.08em] text-gray-custom">Desde</span><strong class="text-[1.15rem] font-bold text-teal">' + escapeHTML(trip.precio) + '</strong></div>' +
+            '<a href="' + waLink(trip.textoWhatsApp) + '" target="_blank" class="bg-transparent border-[1.5px] border-teal text-teal py-[7px] px-4 rounded-full text-[.75rem] font-semibold cursor-pointer transition-colors duration-200 no-underline hover:bg-teal hover:text-white" onclick="event.stopPropagation()">Consultar</a>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    function buildModalData(trips) {
+      return trips.map(function(t) {
+        return { id: t.id, nombre: t.nombre, categoria: t.categoria, imagen: t.imagen, descripcionCorta: t.descripcionCorta, descripcionLarga: t.descripcionLarga, precio: t.precio, textoWhatsApp: t.textoWhatsApp };
+      });
+    }
+
+    function injectTrips() {
+      var trips = loadTrips();
+      if (!trips.length) return;
+
+      var destGrid = document.querySelector('#destinos .grid');
+      var promoGrid = document.querySelector('#promos .grid');
+
+      if (destGrid) {
+        trips.forEach(function(t) {
+          destGrid.insertAdjacentHTML('beforeend', buildDestCard(t));
+        });
+      }
+
+      if (promoGrid) {
+        trips.forEach(function(t) {
+          promoGrid.insertAdjacentHTML('beforeend', buildPromoCard(t));
+        });
+      }
+
+      // Extend the modal data
+      var existingModalData = window._viajesModalData || [];
+      window._viajesModalData = existingModalData.concat(buildModalData(trips));
+    }
+
+    // Wait for DOM
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', injectTrips);
+    } else {
+      injectTrips();
+    }
+  })();
+</script>

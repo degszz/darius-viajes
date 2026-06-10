@@ -1,0 +1,46 @@
+---
+import { destinos } from '../data/viajes';
+---
+
+<section class="py-20 px-[5vw] bg-offwhite" id="destinos">
+  <div class="text-center mb-11">
+    <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold text-navy tracking-[.04em] uppercase">Elegí tu destino</h2>
+    <span class="block w-[52px] h-[3px] rounded-[2px] mx-auto mt-[10px]" style="background: linear-gradient(90deg, #0EA5A0, #F0B429)"></span>
+  </div>
+
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(230px,1fr))] gap-[22px]">
+    {destinos.map(d => (
+      <div
+        class="rounded-[14px] overflow-hidden relative h-[320px] cursor-pointer shadow-[0_4px_20px_rgba(11,37,69,.12)] transition-all duration-300 hover:-translate-y-[6px] hover:shadow-[0_12px_36px_rgba(11,37,69,.2)] group"
+        id={d.id}
+        data-modal-viaje={d.id}
+      >
+        <img src={d.imagen} alt={d.nombre} loading="lazy" class="w-full h-full object-cover block transition-transform duration-400 group-hover:scale-106" />
+        <div class="absolute inset-0 bg-[linear-gradient(0deg,rgba(11,37,69,.82)_38%,transparent_70%)] flex flex-col justify-end p-[22px_20px]">
+          <div class="w-[38px] h-[38px] rounded-full bg-teal/25 backdrop-blur-sm border-[1.5px] border-teal/60 flex items-center justify-center mb-3">
+            {d.id === 'caribe' && (
+              <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-teal-light"><path d="M3 17c3-3 9-3 12 0s9 0 9 0"/><path d="M3 7s6-4 12 0 9 0 9 0"/><path d="M3 12c3-2 9-2 12 0s9 0 9 0"/></svg>
+            )}
+            {d.id === 'brasil' && (
+              <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-teal-light"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+            )}
+            {d.id === 'cruceros' && (
+              <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-teal-light"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2"/><path d="M5 20V9l7-7 7 7v11"/><path d="M9 20v-5h6v5"/></svg>
+            )}
+            {d.id === 'argentina' && (
+              <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] fill-teal-light"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+            )}
+          </div>
+          <h3 class="text-[1.3rem] font-bold text-white mb-1">{d.nombre}</h3>
+          <p class="text-[.8rem] text-white/75 mb-[14px] leading-relaxed">{d.descripcionCorta}</p>
+          <button
+            type="button"
+            data-modal-viaje={d.id}
+            class="inline-block bg-teal text-white py-[7px] px-[18px] rounded-full text-[.75rem] font-bold no-underline self-start transition-colors duration-200 hover:bg-teal-light cursor-pointer border-none">
+            Más información
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,3 @@
+{
+  "buildCommand": "node scripts/generate-og-image.mjs && astro build"
+}

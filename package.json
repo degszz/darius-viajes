@@ -7,8 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "node scripts/generate-og-image.mjs",
-    "build": "astro build",
+    "build": "node scripts/generate-og-image.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },

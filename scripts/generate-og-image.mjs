@@ -11,7 +11,7 @@ const bgPaths = [
   resolve(publicDir, "janeiro.avif"),
   resolve(publicDir, "altamar.avif"),
 ];
-const outPath = resolve(publicDir, "og-image.jpg");
+const outPath = resolve(publicDir, "preview.jpg");
 
 async function main() {
   if (!existsSync(svgPath)) {
@@ -53,10 +53,10 @@ async function main() {
 
     await sharp(bgBuffer)
       .composite([{ input: overlay, top: 0, left: 0 }])
-      .jpeg({ quality: 82, progressive: true })
+      .jpeg({ quality: 85, progressive: false, mozjpeg: true })
       .toFile(outPath);
 
-    console.log("og-image.jpg generated (1200x630)");
+    console.log("preview.jpg generated (1200x630)");
   } catch (e) {
     if (e.code === "ERR_MODULE_NOT_FOUND") {
       console.log("sharp not installed, skipping generation.");

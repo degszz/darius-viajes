@@ -6,33 +6,62 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, "..");
 const publicDir = resolve(root, "public");
 const svgPath = resolve(publicDir, "og-image.svg");
-const bgPath = resolve(publicDir, "puntacana.avif");
-const pngPath = resolve(publicDir, "og-image.png");
+const bgPaths = [
+  resolve(publicDir, "puntacana.avif"),
+  resolve(publicDir, "janeiro.avif"),
+  resolve(publicDir, "altamar.avif"),
+];
+const outPath = resolve(publicDir, "og-image.jpg");
 
 async function main() {
   if (!existsSync(svgPath)) {
-    console.log("og-image.svg not found, skipping PNG generation.");
+    console.log("og-image.svg not found, skipping.");
     return;
   }
 
   try {
     const sharp = (await import("sharp")).default;
 
-    const background = sharp(bgPath).resize(1200, 630, { fit: "cover", position: "center" });
-    const overlay = sharp(readFileSync(svgPath)).resize(1200, 630);
+    let bgBuffer = null;
+    let bgUsed = "";
 
-    await background
-      .composite([{ input: await overlay.png().toBuffer(), top: 0, left: 0 }])
-      .png()
-      .toFile(pngPath);
+    for (const p of bgPaths) {
+      if (existsSync(p)) {
+        try {
+          bgBuffer = await sharp(p)
+            .resize(1200, 630, { fit: "cover", position: "center" })
+            .toFormat("png")
+            .toBuffer();
+          bgUsed = p;
+          break;
+        } catch {
+          continue;
+        }
+      }
+    }
 
-    console.log(`og-image.png generated (1200x630) with photo background`);
+    if (!bgBuffer) {
+      console.log("No photo background available, using solid navy fallback.");
+      bgBuffer = await sharp({
+        create: { width: 1200, height: 630, channels: 3, background: { r: 11, g: 37, b: 69 } },
+      }).png().toBuffer();
+    } else {
+      console.log(`Background: ${bgUsed}`);
+    }
+
+    const overlay = await sharp(readFileSync(svgPath)).resize(1200, 630).png().toBuffer();
+
+    await sharp(bgBuffer)
+      .composite([{ input: overlay, top: 0, left: 0 }])
+      .jpeg({ quality: 88, progressive: true })
+      .toFile(outPath);
+
+    console.log("og-image.jpg generated (1200x630)");
   } catch (e) {
     if (e.code === "ERR_MODULE_NOT_FOUND") {
-      console.log("sharp not installed, skipping PNG generation.");
-      console.log("Install with: npm install --save-dev sharp");
+      console.log("sharp not installed, skipping generation.");
     } else {
-      console.error("Failed to generate og-image.png:", e.message);
+      console.error("Failed to generate og-image:", e.message);
       process.exit(1);
     }
   }

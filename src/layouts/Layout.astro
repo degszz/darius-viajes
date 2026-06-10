@@ -8,12 +8,12 @@ export interface Props {
 const {
   title,
   description,
-  image = "/social.jpg",
+  image = "/preview.jpg",
 } = Astro.props;
 
 const SITE = "https://dariusviajes.vercel.app";
-const DEFAULT_TITLE = "Darius Viajes — Descubrí tu próximo destino";
-const DEFAULT_DESC = "Caribe, Brasil, Cruceros y Argentina. Viajá con quienes realmente te acompañan. Más de 20 años de experiencia.";
+const DEFAULT_TITLE = "Darius Viajes \u2014 Descubri tu proximo destino";
+const DEFAULT_DESC = "Caribe, Brasil, Cruceros y Argentina. Viaja con quienes realmente te acompanan. Mas de 20 anos de experiencia.";
 
 const pageTitle = title || DEFAULT_TITLE;
 const pageDesc = description || DEFAULT_DESC;
@@ -23,18 +23,13 @@ import '../styles/global.css';
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es" prefix="og: https://ogp.me/ns#">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    <title>{pageTitle}</title>
-    <meta name="description" content={pageDesc} />
-    <link rel="canonical" href={SITE} />
-
-    <!-- Open Graph -->
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDesc} />
     <meta property="og:image" content={pageImage} />
@@ -45,13 +40,13 @@ import '../styles/global.css';
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_AR" />
     <meta property="og:site_name" content="Darius Viajes" />
-
-    <!-- Twitter -->
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    <link rel="canonical" href={SITE} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDesc} />
     <meta name="twitter:image" content={pageImage} />
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />

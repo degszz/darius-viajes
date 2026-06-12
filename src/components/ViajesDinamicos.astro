@@ -30,9 +30,9 @@
 
     function buildDestCard(trip) {
       var icon = categoryIcons[trip.categoria] || '';
-      return '<div class="rounded-[14px] overflow-hidden relative h-[320px] cursor-pointer shadow-[0_4px_20px_rgba(11,37,69,.12)] transition-all duration-300 hover:-translate-y-[6px] hover:shadow-[0_12px_36px_rgba(11,37,69,.2)] group" data-modal-viaje="' + escapeHTML(trip.id) + '" style="--tw-translate-x:0;--tw-translate-y:0">' +
+      return '<div class="rounded-[14px] overflow-hidden relative h-[320px] cursor-pointer shadow-[0_4px_20px_rgba(0,28,84,.12)] transition-all duration-300 hover:-translate-y-[6px] hover:shadow-[0_12px_36px_rgba(0,28,84,.2)] group" data-modal-viaje="' + escapeHTML(trip.id) + '" style="--tw-translate-x:0;--tw-translate-y:0">' +
         '<img src="' + escapeHTML(trip.imagen) + '" alt="' + escapeHTML(trip.nombre) + '" loading="lazy" class="w-full h-full object-cover block transition-transform duration-400 group-hover:scale-106" onerror="this.src=\'/bariloche.avif\'" />' +
-        '<div class="absolute inset-0 bg-[linear-gradient(0deg,rgba(11,37,69,.82)_38%,transparent_70%)] flex flex-col justify-end p-[22px_20px]">' +
+        '<div class="absolute inset-0 bg-[linear-gradient(0deg,rgba(0,28,84,.82)_38%,transparent_70%)] flex flex-col justify-end p-[22px_20px]">' +
           '<div class="w-[38px] h-[38px] rounded-full bg-teal/25 backdrop-blur-sm border-[1.5px] border-teal/60 flex items-center justify-center mb-3">' + icon + '</div>' +
           '<h3 class="text-[1.3rem] font-bold text-white mb-1">' + escapeHTML(trip.nombre) + '</h3>' +
           '<p class="text-[.8rem] text-white/75 mb-[14px] leading-relaxed">' + escapeHTML(trip.descripcionCorta) + '</p>' +
@@ -42,7 +42,7 @@
     }
 
     function buildPromoCard(trip) {
-      return '<div class="rounded-xl overflow-hidden shadow-[0_3px_16px_rgba(11,37,69,.10)] transition-all duration-300 bg-white hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(11,37,69,.16)] group cursor-pointer" data-modal-viaje="' + escapeHTML(trip.id) + '">' +
+      return '<div class="rounded-xl overflow-hidden shadow-[0_3px_16px_rgba(0,28,84,.10)] transition-all duration-300 bg-white hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(0,28,84,.16)] group cursor-pointer" data-modal-viaje="' + escapeHTML(trip.id) + '">' +
         '<div class="relative h-40 overflow-hidden">' +
           '<img src="' + escapeHTML(trip.imagen) + '" alt="' + escapeHTML(trip.nombre) + '" loading="lazy" class="w-full h-full object-cover transition-transform duration-400 group-hover:scale-108" onerror="this.src=\'/bariloche.avif\'" />' +
         '</div>' +

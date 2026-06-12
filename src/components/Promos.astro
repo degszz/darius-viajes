@@ -5,12 +5,12 @@ import { promos, waLink } from '../data/viajes';
 <section class="py-20 px-[5vw] bg-white" id="promos">
   <div class="text-center mb-11">
     <h2 class="text-[clamp(1.5rem,3vw,2.1rem)] font-bold text-navy tracking-[.04em] uppercase">Promociones de la semana</h2>
-    <span class="block w-[52px] h-[3px] rounded-[2px] mx-auto mt-[10px]" style="background: linear-gradient(90deg, #0EA5A0, #F0B429)"></span>
+    <span class="block w-[52px] h-[3px] rounded-[2px] mx-auto mt-[10px]" style="background: linear-gradient(90deg, #009BC1, #001C54)"></span>
   </div>
 
   <div class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-5">
     {promos.map(p => (
-      <div class="rounded-xl overflow-hidden shadow-[0_3px_16px_rgba(11,37,69,.10)] transition-all duration-300 bg-white hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(11,37,69,.16)] group cursor-pointer" data-modal-viaje={p.viajeRef}>
+      <div class="rounded-xl overflow-hidden shadow-[0_3px_16px_rgba(0,28,84,.10)] transition-all duration-300 bg-white hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(0,28,84,.16)] group cursor-pointer" data-modal-viaje={p.viajeRef}>
         <div class="relative h-40 overflow-hidden">
           <img src={p.imagen} alt={p.nombre} loading="lazy" class="w-full h-full object-cover transition-transform duration-400 group-hover:scale-108" />
         </div>

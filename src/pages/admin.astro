@@ -6,7 +6,7 @@ import Layout from '../layouts/Layout.astro';
   <style>
     .admin-body {
       font-family: 'Inter', sans-serif;
-      background: #F5F9FC;
+      background: #F6F7F9;
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -16,7 +16,7 @@ import Layout from '../layouts/Layout.astro';
     .admin-container {
       background: #fff;
       border-radius: 16px;
-      box-shadow: 0 4px 32px rgba(11,37,69,.12);
+      box-shadow: 0 4px 32px rgba(0,28,84,.12);
       width: 100%;
       max-width: 860px;
       padding: 40px;
@@ -24,7 +24,7 @@ import Layout from '../layouts/Layout.astro';
     .admin-container h1 {
       font-family: 'Playfair Display', serif;
       font-size: 1.8rem;
-      color: #0B2545;
+      color: #001C54;
       margin: 0 0 6px;
     }
     .admin-container .subtitle {
@@ -39,7 +39,7 @@ import Layout from '../layouts/Layout.astro';
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: #0B2545;
+      color: #001C54;
       margin-bottom: 5px;
     }
     .form-group input, .form-group textarea, .form-group select {
@@ -49,14 +49,14 @@ import Layout from '../layouts/Layout.astro';
       border-radius: 8px;
       font-size: 0.9rem;
       font-family: inherit;
-      color: #0B2545;
+      color: #001C54;
       background: #fff;
       transition: border-color 0.2s;
       box-sizing: border-box;
     }
     .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
       outline: none;
-      border-color: #0EA5A0;
+      border-color: #009BC1;
     }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .btn {
@@ -66,37 +66,37 @@ import Layout from '../layouts/Layout.astro';
       transition: background 0.2s, transform 0.15s;
       font-family: inherit;
     }
-    .btn-primary { background: #0EA5A0; color: #fff; }
-    .btn-primary:hover { background: #14C9C3; }
+    .btn-primary { background: #009BC1; color: #fff; }
+    .btn-primary:hover { background: #009BC1; }
     .btn-danger { background: #ef4444; color: #fff; }
     .btn-danger:hover { background: #dc2626; }
-    .btn-outline { background: transparent; border: 1.5px solid #0EA5A0; color: #0EA5A0; }
-    .btn-outline:hover { background: #0EA5A0; color: #fff; }
+    .btn-outline { background: transparent; border: 1.5px solid #009BC1; color: #009BC1; }
+    .btn-outline:hover { background: #009BC1; color: #fff; }
     .btn-sm { padding: 6px 14px; font-size: 0.75rem; }
     .trip-list { margin-top: 32px; }
-    .trip-list h3 { font-size: 1rem; color: #0B2545; margin: 0 0 16px; }
+    .trip-list h3 { font-size: 1rem; color: #001C54; margin: 0 0 16px; }
     .trip-item {
       display: flex; align-items: center; gap: 16px;
       padding: 14px; border-radius: 10px;
       border: 1px solid #e2e8f0; margin-bottom: 10px;
       transition: border-color 0.2s;
     }
-    .trip-item:hover { border-color: #0EA5A0; }
+    .trip-item:hover { border-color: #009BC1; }
     .trip-item img { width: 60px; height: 44px; object-fit: cover; border-radius: 6px; background: #e2e8f0; }
     .img-upload-area {
       border: 2px dashed #d1d5db; border-radius: 10px; padding: 20px;
       text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s;
       background: #fafafa;
     }
-    .img-upload-area:hover { border-color: #0EA5A0; background: #f0fdfa; }
-    .img-upload-area.has-image { border-style: solid; border-color: #0EA5A0; background: #f0fdfa; }
+    .img-upload-area:hover { border-color: #009BC1; background: #f0fdfa; }
+    .img-upload-area.has-image { border-style: solid; border-color: #009BC1; background: #f0fdfa; }
     .img-upload-area input[type=file] { display: none; }
     .img-upload-area .upload-text { font-size: 0.82rem; color: #6B7280; }
-    .img-upload-area .upload-text strong { color: #0EA5A0; }
+    .img-upload-area .upload-text strong { color: #009BC1; }
     .img-upload-area img { max-width: 100%; max-height: 160px; border-radius: 8px; margin-top: 10px; }
-    .img-preview-small { margin-top: 6px; font-size: 0.7rem; color: #0EA5A0; }
+    .img-preview-small { margin-top: 6px; font-size: 0.7rem; color: #009BC1; }
     .trip-item .info { flex: 1; }
-    .trip-item .info strong { display: block; font-size: 0.9rem; color: #0B2545; }
+    .trip-item .info strong { display: block; font-size: 0.9rem; color: #001C54; }
     .trip-item .info span { font-size: 0.75rem; color: #6B7280; }
     .trip-item .actions { display: flex; gap: 8px; }
     .message { font-size: 0.8rem; padding: 8px 14px; border-radius: 8px; margin-bottom: 16px; }
@@ -109,10 +109,10 @@ import Layout from '../layouts/Layout.astro';
     }
     .btn-back {
       display: inline-flex; align-items: center; gap: 6px;
-      font-size: 0.82rem; color: #0EA5A0; text-decoration: none;
+      font-size: 0.82rem; color: #009BC1; text-decoration: none;
       margin-bottom: 20px; font-weight: 500;
     }
-    .btn-back:hover { color: #14C9C3; }
+    .btn-back:hover { color: #009BC1; }
     @media (max-width: 600px) {
       .admin-container { padding: 24px; }
       .form-row { grid-template-columns: 1fr; }

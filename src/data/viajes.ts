@@ -29,7 +29,7 @@ export interface PromoViaje {
   textoWhatsApp: string;
 }
 
-export const whatsappNumero = "5491112345678";
+export const whatsappNumero = "542226689720";
 
 export function waLink(texto: string): string {
   return `https://wa.me/${whatsappNumero}?text=${encodeURIComponent(texto)}`;
